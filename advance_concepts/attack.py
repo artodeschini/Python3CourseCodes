@@ -10,9 +10,10 @@ while playerhp > 0:
     playerhp = playerhp - dmg
 
     if playerhp <= 30:
-        playerhp = 0
+        playerhp = 30
 
     print('Enemy striker for ', dmg, 'points of damage. Current HP is', playerhp)
 
-    if playerhp == 0:
-        print('You have died. You cannot respawn, as you are dead')
+    if playerhp == 30:
+        print("You have low health. You've been teleported, as you to the near inn")
+        break
