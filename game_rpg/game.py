@@ -72,4 +72,4 @@ class Person:
     def choose_magic(self):
         print('Magical')
         for i, spell in enumerate(self.magic):
-            print(f'{i+1} : {spell["name"]} cost = {self["dmg"]}')
+            print(f'{i+1} : {spell["name"]} cost = {spell["dmg"]}')
