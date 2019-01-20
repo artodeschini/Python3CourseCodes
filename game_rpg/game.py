@@ -69,4 +69,5 @@ class Person:
     def choose_item(self):
         print('\n' + Bcolor.OKGREEN + Bcolor.BOLD + 'Item' + Bcolor.ENDC)
         for i, item in enumerate(self.itens):
-            print(f'\t{i+1} : {item.name} type = {item.type} {item.description} prop {item.prop}')
+            print(f'\t{i+1} : {item["item"].name} type = {item["item"].type} {item["item"].description} '
+                  f'prop {item["item"].prop} (x{str(item["quantity"])})')

@@ -23,7 +23,9 @@ high_elixir = Item('High Elixir', 'elixir', 'Fully restore partys HP/MP', 99999)
 grenade = Item('Grenade', 'attack', 'Deals 500 damage', 500)
 
 player_spells = [fire, thunder, blizzard, meteor, quake, cure_small, cure_large]
-player_itens = [potion, high_potion, super_potion, elixir, high_elixir, grenade]
+player_itens = [{'item': potion, 'quantity': 15}, {'item': high_potion, 'quantity': 5},
+                {'item': super_potion, 'quantity': 5}, {'item': elixir, 'quantity': 5},
+                {'item': high_elixir, 'quantity': 2}, {'item': grenade, 'quantity': 5}]
 
 # instance of player
 player = Person(460, 65, 60, 34, player_spells, player_itens)
@@ -74,17 +76,34 @@ while running:
 
     elif index == 2:
         player.choose_item()
-        item_chooise = int('Choose a item') - 1
+        item_chooise = int(input('Choose a item')) - 1
 
         if item_chooise == -1:
             continue
 
-        item = player.itens[item_chooise]
+        item = player.itens[item_chooise]['item']
+        player.itens[item_chooise]['quantity'] -= 1
+
+        if player.itens[item_chooise]['quantity'] == 0:
+            print('\n' + Bcolor.FAIL + Bcolor.BOLD + 'None left ...' + Bcolor.ENDC)
+            continue
 
         if item.type == 'potion':
             player.set_hp(item.prop)
             print('\n' + Bcolor.OKGREEN + Bcolor.BOLD + item.name +
-                  ' heals for '+ str(item.prop) + ' HP ' + Bcolor.ENDC)
+                  ' heals for ' + str(item.prop) + ' HP ' + Bcolor.ENDC)
+
+        elif item.type == 'elixir':
+            player.hp = player.get_max_hp()
+            player.mp = player.get_max_mp()
+            print('\n' + Bcolor.OKGREEN + Bcolor.BOLD + item.name +
+                  ' heals for ' + str(item.prop) + ' full restore HP/MP ' + Bcolor.ENDC)
+
+        elif item.type == 'attack':
+            enemy.take_damage(item.prop)
+            print('\n' + Bcolor.FAIL + Bcolor.BOLD + item.name +
+                  ' heals for ' + str(item.prop) + ' deals ' + str(item.prop) +
+                  ' points of damage' + Bcolor.ENDC)
 
     enemy_dmg = enemy.generate_damage()
     player.take_damage(enemy_dmg)
