@@ -13,7 +13,7 @@ class Bcolor:
 
 
 class Person:
-    def __init__(self, hp, mp, atk, df, magic):
+    def __init__(self, hp, mp, atk, df, magic, itens):
         self.maxhp = hp
         self.hp = hp
         self.maxmp = mp
@@ -22,7 +22,8 @@ class Person:
         self.atkh = atk + 10
         self.df = df
         self.magic = magic
-        self.actions = ["Attack", "Magic"]
+        self.itens = itens
+        self.actions = ["Attack", "Magic", "Itens"]
 
     def generate_damage(self):
         return random.randrange(self.atkl, self.atkh)
@@ -56,11 +57,16 @@ class Person:
         return self.mp
 
     def choose_action(self):
-        print('Actions')
+        print('\n' + Bcolor.OKBLUE + Bcolor.BOLD + 'ACTIONS' + Bcolor.ENDC)
         for i, item in enumerate(self.actions):
-            print(Bcolor.OKBLUE + Bcolor.BOLD + f'{i + 1} : {item}' + Bcolor.ENDC)
+            print(f'\t{i + 1} : {item}')
 
     def choose_magic(self):
-        print('Magical')
+        print('\n' + Bcolor.OKBLUE + Bcolor.BOLD + 'MAGICAL' + Bcolor.ENDC)
         for i, spell in enumerate(self.magic):
-            print(Bcolor.OKGREEN + Bcolor.BOLD + f'{i+1} : {spell.name} cost = {spell.dmg}' + Bcolor.ENDC)
+            print(f'\t{i+1} : {spell.name} cost = {spell.dmg}')
+
+    def choose_item(self):
+        print('\n' + Bcolor.OKGREEN + Bcolor.BOLD + 'Item' + Bcolor.ENDC)
+        for i, item in enumerate(self.itens):
+            print(f'\t{i+1} : {item.name} type = {item.type} {item.description} prop {item.prop}')

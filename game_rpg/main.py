@@ -1,5 +1,6 @@
 from game_rpg.game import Person, Bcolor
 from game_rpg.magic import Spell
+from game_rpg.inventory import Item
 
 
 # black magic
@@ -13,11 +14,20 @@ quake = Spell('quake', 14, 140, 'black')
 cure_small = Spell('cure', 12, 120, 'white')
 cure_large = Spell('cure', 18, 200, 'white')
 
-magic = [fire, thunder, blizzard, meteor, quake, cure_small, cure_large]
+# create some itens
+potion = Item('Potion', 'potion', 'Heals 50 HP', 50)
+high_potion = Item('High Potion', 'potion', 'Heals 100 HP', 100)
+super_potion = Item('Super Potion', 'potion', 'Heals 500', 500)
+elixir = Item('Elixir', 'elixir', 'Restore HP/MP of one part member', 99999)
+high_elixir = Item('High Elixir', 'elixir', 'Fully restore partys HP/MP', 99999)
+grenade = Item('Grenade', 'attack', 'Deals 500 damage', 500)
+
+player_spells = [fire, thunder, blizzard, meteor, quake, cure_small, cure_large]
+player_itens = [potion, high_potion, super_potion, elixir, high_elixir, grenade]
 
 # instance of player
-player = Person(460, 65, 60, 34, magic)
-enemy = Person(1200, 65, 45, 25, [])
+player = Person(460, 65, 60, 34, player_spells, player_itens)
+enemy = Person(1200, 65, 45, 25, [], [])
 
 running = True
 
@@ -27,16 +37,20 @@ while running:
     print('================================')
     player.choose_action()
     choose = input('Choose an action:')
-    print(f'You choose a {choose}')
+    print(f'You choose a {choose} \n')
     index = int(choose) - 1
 
     if index == 0:
         dmg = player.generate_damage()
         enemy.take_damage(dmg)
         print(f'You attack for {dmg} points in enemy. Hp for enemy is {enemy.get_hp()}')
+
     elif index == 1:
         player.choose_magic()
         magic_choose = int(input('Choose magic')) - 1
+
+        if magic_choose == -1:
+            continue
 
         spell = player.magic[magic_choose]
         magic_change = spell.generate_damage()
@@ -57,6 +71,20 @@ while running:
             enemy.take_damage(magic_change)
             print(Bcolor.OKBLUE + spell.name + ' deals '
                   + str(magic_change) + ' 2 points damage in the enemy' + Bcolor.ENDC)
+
+    elif index == 2:
+        player.choose_item()
+        item_chooise = int('Choose a item') - 1
+
+        if item_chooise == -1:
+            continue
+
+        item = player.itens[item_chooise]
+
+        if item.type == 'potion':
+            player.set_hp(item.prop)
+            print('\n' + Bcolor.OKGREEN + Bcolor.BOLD + item.name +
+                  ' heals for '+ str(item.prop) + ' HP ' + Bcolor.ENDC)
 
     enemy_dmg = enemy.generate_damage()
     player.take_damage(enemy_dmg)
