@@ -1,12 +1,23 @@
 from game_rpg.game import Person, Bcolor
+from game_rpg.magic import Spell
 
 
-magic = [{'name': 'fire', 'cost': 10, 'dmg': 100},
-         {'name': 'thunder', 'cost': 10, 'dmg': 135},
-         {'name': 'blizzard', 'cost': 10, 'dmg': 100}]
+# black magic
+fire = Spell('fire', 10, 100, 'black')
+thunder = Spell('thunder', 10, 150, 'black')
+blizzard = Spell('blizzard', 10, 165, 'black')
+meteor = Spell('Meteor', 20, 200, 'black')
+quake = Spell('quake', 14, 140, 'black')
 
+# white magic
+cure_small = Spell('cure', 12, 120, 'white')
+cure_large = Spell('cure', 18, 200, 'white')
+
+magic = [fire, thunder, blizzard, meteor, quake, cure_small, cure_large]
+
+# instance of player
 player = Person(460, 65, 60, 34, magic)
-enemy = Person(1200, 65, 45, 25, magic)
+enemy = Person(1200, 65, 45, 25, [])
 
 running = True
 
@@ -26,19 +37,26 @@ while running:
     elif index == 1:
         player.choose_magic()
         magic_choose = int(input('Choose magic')) - 1
-        magic_dmg = player.generate_spell_damage(magic_choose)
-        spell_name = player.get_spell_name(magic_choose)
-        cost = player.get_spell_cost(magic_choose)
+
+        spell = player.magic[magic_choose]
+        magic_change = spell.generate_damage()
 
         current_mp = player.get_mp()
 
-        if cost > current_mp:
+        if spell.cost > current_mp:
             print(Bcolor.FAIL + 'Not enough MP' + Bcolor.ENDC)
             continue
 
-        player.reduce_mp(cost)
-        enemy.take_damage(magic_dmg)
-        print(Bcolor.OKBLUE + spell_name + ' deals ' + str(magic_dmg) + ' 2points damage in the enemy' + Bcolor.ENDC)
+        player.reduce_mp(spell.cost)
+
+        if spell.type == 'white':
+            player.set_hp(magic_change)
+            print(Bcolor.OKBLUE + Bcolor.BOLD + spell.name +
+                  ' heal you for ' + str(magic_change) + '. HP is ' + str(player.get_hp()) + Bcolor.ENDC)
+        elif spell.type == 'black':
+            enemy.take_damage(magic_change)
+            print(Bcolor.OKBLUE + spell.name + ' deals '
+                  + str(magic_change) + ' 2 points damage in the enemy' + Bcolor.ENDC)
 
     enemy_dmg = enemy.generate_damage()
     player.take_damage(enemy_dmg)
