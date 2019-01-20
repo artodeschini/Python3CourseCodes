@@ -6,10 +6,26 @@ magic = [{'name': 'fire', 'cost': 10, 'dmg': 60},
          {'name': 'blizzard', 'cost': 10, 'dmg': 60}]
 
 player = Person(460, 65, 60, 34, magic)
+enemy = Person(1200, 65, 45, 25, magic)
 
+running = True
 
-for i in range(0,3):
-    print(f'call {i} generate_damage', player.generate_damage())
+print(Bcolor.FAIL + Bcolor.BOLD + 'AN ENEMY ATTACK' + Bcolor.ENDC)
 
-for i in range(0,3):
-    print(f'call {i} generate_spell_damage', player.generate_spell_damage(i))
+while running:
+    print('================================')
+    player.choose_action()
+    choose = input('Choose an action:')
+    print(f'You choose a {choose}')
+    index = int(choose) - 1
+
+    if index == 0:
+        dmg = player.generate_damage()
+        enemy.take_damage(dmg)
+        print(f'You attack for {dmg} points in enemy. Hp for enemy is {enemy.get_hp()}')
+
+    enemy_dmg = enemy.generate_damage()
+    player.take_damage(enemy_dmg)
+    print(f'Enemy attack for {enemy_dmg} points in you. Your hp is {player.get_hp()}')
+
+    running = False
