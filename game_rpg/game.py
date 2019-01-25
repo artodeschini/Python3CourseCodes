@@ -74,6 +74,14 @@ class Person:
             print(f'\t{i+1} : {item["item"].name} type = {item["item"].type} {item["item"].description} '
                   f'prop {item["item"].prop} (x{str(item["quantity"])})')
 
+    def choose_target(self, enemys):
+        print('\n' + Bcolor.FAIL + Bcolor.BOLD + 'TARGET' + Bcolor.ENDC)
+        for i, e in enumerate(enemys):
+            print(f'{i+1} - {e.name}')
+
+        choose = int(input('Choose a enemy'))
+        return enemys[choose-1]
+
     def get_enemy_stats(self):
         hp_bar = ''
         bar_ticks = (self.hp / self.maxhp) * 100 / 2

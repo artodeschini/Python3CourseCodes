@@ -32,7 +32,7 @@ potion = Item('Potion', 'potion', 'Heals 50 HP', 50)
 high_potion = Item('High Potion', 'potion', 'Heals 100 HP', 100)
 super_potion = Item('Super Potion', 'potion', 'Heals 500', 500)
 elixir = Item('Elixir', 'elixir', 'Restore HP/MP of one part member', 99999)
-high_elixir = Item('High Elixir', 'elixir', 'Fully restore partys HP/MP', 99999)
+high_elixir = Item('MegaElixir', 'elixir', 'Fully restore partys HP/MP', 99999)
 grenade = Item('Grenade', 'attack', 'Deals 500 damage', 500)
 
 player_spells = [fire, thunder, blizzard, meteor, quake, cure_small, cure_large]
@@ -47,7 +47,12 @@ player3 = Person('Manu ', 3460, 165, 60, 34, player_spells, player_itens)
 
 players = [player1, player2, player3]
 
-enemy = Person('Dark',1200, 65, 450, 25, [], [])
+
+enemy1 = Person('Bad ', 1200, 130, 560, 325, [], [])
+enemy2 = Person('Dark', 18200, 701, 525, 25, [], [])
+enemy3 = Person('Evil', 1200, 65, 450, 25, [], [])
+
+enemys = [enemy1, enemy2, enemy3]
 
 running = True
 
@@ -59,7 +64,9 @@ while running:
         player.get_stats()
 
     print('\n')
-    enemy.get_enemy_stats()
+
+    for enemy in enemys:
+        enemy.get_enemy_stats()
 
     for player in players:
         print('\n\n')
@@ -72,6 +79,7 @@ while running:
 
         if index == 0:
             dmg = player.generate_damage()
+            enemy = player.choose_target(enemys)
             enemy.take_damage(dmg)
             print()
             _print_blue_msg(f'The attack of {player.name} had a damage for {dmg} points in enemy {enemy.name}.' +
@@ -84,6 +92,7 @@ while running:
             if magic_choose == -1:
                 continue
 
+            enemy = player.choose_target(enemys)
             spell = player.magic[magic_choose]
             magic_change = spell.generate_damage()
 
@@ -103,6 +112,7 @@ while running:
                 _print_blue_msg(spell.name + ' deals ' + str(magic_change) + ' 2 points damage in the enemy')
 
         elif index == 2:
+            enemy = player.choose_target(enemys)
             player.choose_item()
             item_chooise = int(input('Choose a item')) - 1
 
