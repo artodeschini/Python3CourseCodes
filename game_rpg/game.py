@@ -74,26 +74,33 @@ class Person:
             print(f'\t{i+1} : {item["item"].name} type = {item["item"].type} {item["item"].description} '
                   f'prop {item["item"].prop} (x{str(item["quantity"])})')
 
-    def _print_bold_and_color(msg, value1, color1, blocks1, value2, color2, blocks2):
-        print(
-            Bcolor.BOLD + msg + value1 + color1 + blocks1 + Bcolor.ENDC + value2 + color2 + blocks2 + Bcolor.ENDC + '|')
+    def get_enemy_stats(self):
+        hp_bar = ''
+        bar_ticks = (self.hp / self.maxhp) * 100 / 2
 
-    @staticmethod
-    def print_with_space_after(txt, n):
-        i = 0
-        while i < n:
-            txt += ' '
-            i += 1
-        return txt
+        while bar_ticks > 0:
+            hp_bar += '█'
+            bar_ticks -= 1
 
-    @staticmethod
-    def print_with_space_before(txt, n):
-        result = ''
-        i = 0
-        while i <= n:
-            result += ' '
-            i += 1
-        return result + txt
+        while len(hp_bar) < 50:
+            hp_bar += ' '
+
+        hp_string = str(self.hp) + '/' + str(self.maxhp)
+        current_hp = ''
+
+        if len(hp_string) < 11:
+            decreased_hp = 11 - len(hp_string)
+
+            while decreased_hp > 0:
+                current_hp = ' '
+                decreased_hp -= 1
+
+            current_hp += hp_string
+        else:
+            current_hp = hp_string
+
+        print('                   __________________________________________________')
+        print(self.name + ':  ' + current_hp + " |" + Bcolor.FAIL + hp_bar + Bcolor.ENDC + '|')
 
     def get_stats(self):
         hp_bar = ''
@@ -116,8 +123,34 @@ class Person:
         while len(mp_bar) < 10:
             mp_bar += ' '
 
-        print('                       _________________________               __________ ')
-        print(self.name + ':  ' + self.print_with_space_before(str(self.get_hp()),4) + '/' + str(self.get_max_hp())
-              + " |" + Bcolor.OKGREEN + hp_bar + Bcolor.ENDC + '|  ' +
-              self.print_with_space_before(str(self.get_mp()),3) + '/' + str(self.get_max_mp()) + ' |'
-              + Bcolor.OKBLUE + mp_bar + Bcolor.ENDC + '|')
+        hp_string = str(self.hp) + '/' + str(self.maxhp)
+        current_hp = ''
+
+        if len(hp_string) < 9:
+            decreased_hp = 9 - len(hp_string)
+
+            while decreased_hp > 0:
+                current_hp = ' '
+                decreased_hp -= 1
+
+            current_hp += hp_string
+        else:
+            current_hp = hp_string
+
+        mp_string = str(self.mp) + '/' + str(self.maxmp)
+        current_mp = ''
+
+        if len(mp_string) < 7:
+            decreased_mp = 7 - len(mp_string)
+
+            while decreased_mp > 0:
+                current_mp = ' '
+                decreased_mp -= 1
+
+            current_mp += mp_string
+        else:
+            current_mp = mp_string
+
+        print('                   _________________________            __________ ')
+        print(self.name + ':  ' + current_hp + " |" + Bcolor.OKGREEN + hp_bar + Bcolor.ENDC + '|  ' + current_mp +
+              ' |' + Bcolor.OKBLUE + mp_bar + Bcolor.ENDC + '|')

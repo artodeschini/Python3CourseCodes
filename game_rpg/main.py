@@ -1,6 +1,7 @@
 from game_rpg.game import Person, Bcolor
 from game_rpg.magic import Spell
 from game_rpg.inventory import Item
+import random
 
 
 def _print_blue_msg(msg):
@@ -46,16 +47,19 @@ player3 = Person('Manu ', 3460, 165, 60, 34, player_spells, player_itens)
 
 players = [player1, player2, player3]
 
-enemy = Person('Dark Soul',1200, 65, 450, 25, [], [])
+enemy = Person('Dark',1200, 65, 450, 25, [], [])
 
 running = True
 
-print(Bcolor.FAIL + Bcolor.BOLD + 'AN ENEMY ATTACK' + Bcolor.ENDC)
+_print_red_msg('AN ENEMY ATTACK')
 
 while running:
-    print('NAMES:                 HP                                      MP          ')
+    print('NAMES:             HP                                   MP          ')
     for player in players:
         player.get_stats()
+
+    print('\n')
+    enemy.get_enemy_stats()
 
     for player in players:
         print('\n\n')
@@ -70,7 +74,8 @@ while running:
             dmg = player.generate_damage()
             enemy.take_damage(dmg)
             print()
-            _print_blue_msg(f'You attack for {dmg} points in enemy. Hp for enemy is {enemy.get_hp()})')
+            _print_blue_msg(f'The attack of {player.name} had a damage for {dmg} points in enemy {enemy.name}.' +
+                            f'Hp for enemy is {enemy.get_hp()})')
 
         elif index == 1:
             player.choose_magic()
@@ -117,9 +122,16 @@ while running:
                 _print_green_msg('\n' + item.name + ' heals for ' + str(item.prop) + ' HP ')
 
             elif item.type == 'elixir':
-                player.hp = player.get_max_hp()
-                player.mp = player.get_max_mp()
-                _print_green_msg('\n' + item.name + ' heals for ' + str(item.prop) + ' full restore HP/MP ')
+
+                if item.name == 'MegaElixir':
+                    for p in players:
+                        p.hp = p.maxhp
+                        p.mp = p.maxmp
+                    _print_green_msg('\n' + item.name + ' full restore HP/MP')
+                else:
+                    player.hp = player.get_max_hp()
+                    player.mp = player.get_max_mp()
+                    _print_green_msg('\n' + item.name + ' heals for ' + str(item.prop) + ' full restore HP/MP ')
 
             elif item.type == 'attack':
                 enemy.take_damage(item.prop)
@@ -127,12 +139,11 @@ while running:
                                ' points of damage')
 
         enemy_dmg = enemy.generate_damage()
-        player.take_damage(enemy_dmg)
-        _print_red_msg(f'Enemy attack for {enemy_dmg} points in you. Your hp is {player.get_hp()}')
+        target = random.randrange(0,2)
 
-        _print_red_msg('Enemy HP:' + str(enemy.get_hp()) + "/" + str(enemy.get_max_hp()))
-        _print_green_msg('Your HP:' + str(player.get_hp()) + "/" + str(player.get_max_hp()))
-        _print_blue_msg('Your MP:' + str(player.get_mp()) + "/" + str(player.get_max_mp()))
+        players[target].take_damage(enemy_dmg)
+        _print_red_msg(f'Enemy {enemy.name} had a attack for {enemy_dmg} points in {players[target].name}. ' +
+                       f'Your hp is {players[target].get_hp()}')
 
     if enemy.get_hp() == 0:
         _print_green_msg('You win')
