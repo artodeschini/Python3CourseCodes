@@ -149,7 +149,7 @@ while running:
                                ' points of damage')
 
         enemy_dmg = enemy.generate_damage()
-        target = random.randrange(0,2)
+        target = random.randrange(0, 2)
 
         players[target].take_damage(enemy_dmg)
         _print_red_msg(f'Enemy {enemy.name} had a attack for {enemy_dmg} points in {players[target].name}. ' +
